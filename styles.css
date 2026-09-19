@@ -152,6 +152,7 @@ button, input, select { font-family: inherit; }
 .item-qty { color: #7c8a80; font-size: 14px; }
 
 .clear-done-btn { margin: 8px 14px 12px; }
+.complete-shopping-btn { width: 100%; justify-content: center; margin-top: 8px; }
 .empty-hint { color: #7c8a80; padding: 24px 8px; text-align: center; }
 
 /* ---------- Katalog tab ---------- */
