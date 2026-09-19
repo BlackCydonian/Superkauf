@@ -229,6 +229,9 @@ button, input, select { font-family: inherit; }
 
 .dish-editor-actions { margin-top: 8px; }
 
+.dish-select-row { cursor: pointer; }
+.dish-select-row:active { background: rgba(0, 0, 0, .04); }
+
 /* ---------- Sticky quick-add bar (above bottom nav, thumb reach) ---------- */
 
 .quick-add-bar {

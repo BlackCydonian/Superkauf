@@ -36,6 +36,7 @@
     <section id="tab-einkauf" class="tab active">
       <div class="list-toolbar">
         <button class="btn-secondary btn-icon" onclick="openPicker()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Aus Katalog wählen</button>
+        <button class="btn-secondary btn-icon" onclick="openDishSelector()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v18H6.5A2.5 2.5 0 0 1 4 18.5v-13Z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H12v18h5.5a2.5 2.5 0 0 0 2.5-2.5v-13Z"/></svg> Aus Speisen wählen</button>
         <button class="btn-secondary btn-icon" onclick="completeShopping()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg> Einkauf abschließen</button>
       </div>
       <div id="active-list-content" class="scroll-content"></div>
@@ -103,7 +104,7 @@
         <button class="icon-btn" onclick="closeDishPicker()" aria-label="Schließen"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
       </div>
       <div id="dish-picker-content" class="scroll-content"></div>
-      <button class="btn-primary modal-confirm" onclick="confirmDishPicker()">Übernehmen</button>
+      <button id="dish-picker-confirm" class="btn-primary modal-confirm" onclick="confirmDishPicker()">Übernehmen</button>
     </div>
   </div>
 

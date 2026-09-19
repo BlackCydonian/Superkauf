@@ -186,12 +186,31 @@ export async function removeDish(id) {
   renderDishes();
 }
 
+export function openDishSelector() {
+  pickerDishId = null;
+  document.getElementById('dish-picker-heading').textContent = 'Speise wählen';
+  document.getElementById('dish-picker-confirm').style.display = 'none';
+  const el = document.getElementById('dish-picker-content');
+
+  if (!data.dishes.length) {
+    el.innerHTML = '<p class="empty-hint">Noch keine Speisen angelegt. Leg im Speisen-Tab welche an.</p>';
+  } else {
+    el.innerHTML = `<ul class="item-list">${data.dishes.map(dish => `
+      <li class="item-row dish-select-row" onclick="openDishPicker(${dish.id})">
+        <span class="item-name">${escapeHtml(dish.name)}</span>
+      </li>`).join('')}</ul>`;
+  }
+
+  document.getElementById('dish-picker-modal').style.display = 'flex';
+}
+
 export function openDishPicker(dishId) {
   const dish = data.dishes.find(d => d.id === dishId);
   if (!dish) return;
   pickerDishId = dishId;
 
   document.getElementById('dish-picker-heading').textContent = `Zutaten für „${dish.name}“`;
+  document.getElementById('dish-picker-confirm').style.display = '';
   const el = document.getElementById('dish-picker-content');
 
   if (!dish.dish_ingredients.length) {

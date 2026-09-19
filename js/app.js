@@ -7,7 +7,7 @@ import {
   loadDishes, renderDishes, newDish, editDish, cancelDishEditor, removeDish, saveDish,
   updateDraftName, updateDraftIngredient, updateDraftIngredientCategory, updateDraftStep,
   addDraftIngredient, removeDraftIngredient, addDraftStep, removeDraftStep,
-  openDishPicker, closeDishPicker, confirmDishPicker
+  openDishSelector, openDishPicker, closeDishPicker, confirmDishPicker
 } from './dishes.js';
 
 console.log('✅ app.js loaded successfully');
@@ -95,6 +95,7 @@ window.addDraftIngredient = addDraftIngredient;
 window.removeDraftIngredient = removeDraftIngredient;
 window.addDraftStep = addDraftStep;
 window.removeDraftStep = removeDraftStep;
+window.openDishSelector = openDishSelector;
 window.openDishPicker = openDishPicker;
 window.closeDishPicker = closeDishPicker;
 window.confirmDishPicker = confirmDishPicker;
