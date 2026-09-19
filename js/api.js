@@ -1,8 +1,7 @@
 import { data } from './state.js';
 
-// TODO: nach dem Anlegen des Supabase-Projekts eintragen (siehe SETUP.md)
-export const SUPABASE_URL = 'https://YOUR-PROJECT.supabase.co';
-export const SUPABASE_KEY = 'YOUR-ANON-KEY';
+export const SUPABASE_URL = 'https://ywuzwxdetfiguaqdoctt.supabase.co';
+export const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3dXp3eGRldGZpZ3VhcWRvY3R0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTExMTIsImV4cCI6MjEwNTM4NzExMn0.NGWqSMsToYY7VPgLNnqK30Tg4LYL6QdswzNPRW8TDmQ';
 
 let _supabaseClient = null;
 
