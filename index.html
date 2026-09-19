@@ -28,7 +28,10 @@
 
   <header class="app-header">
     <div class="logo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M2.5 3h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg> Superkauf</div>
-    <button class="icon-btn" onclick="signOut()" aria-label="Abmelden"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M15 16l4-4-4-4"/><path d="M19 12H9"/></svg></button>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="showTab('einstellungen')" aria-label="Einstellungen"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1Z"/></svg></button>
+      <button class="icon-btn" onclick="signOut()" aria-label="Abmelden"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M15 16l4-4-4-4"/><path d="M19 12H9"/></svg></button>
+    </div>
   </header>
 
   <main class="app-main">
@@ -52,7 +55,13 @@
       <div id="catalog-content" class="scroll-content"></div>
     </section>
 
-    <section id="tab-kategorien" class="tab">
+    <section id="tab-einstellungen" class="tab">
+      <div class="settings-header">
+        <button class="icon-btn" onclick="showTab('einkauf')" aria-label="Zurück"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
+        <h2 class="settings-title">Einstellungen</h2>
+      </div>
+
+      <h3 class="editor-subheading">Kategorien</h3>
       <form id="category-add-form" class="inline-add-form" onsubmit="return submitCategoryForm(event)">
         <input type="text" name="name" placeholder="Neue Kategorie…" autocomplete="off" required>
         <button type="submit" class="btn-primary btn-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Hinzufügen</button>
@@ -78,7 +87,6 @@
   <nav class="bottom-nav">
     <button class="nav-btn active" data-tab="einkauf" onclick="showTab('einkauf')"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6.5l1.2 1.2L8 5.3"/><path d="M4.5 12.5l1.2 1.2L8 11.3"/><path d="M4.5 18.5l1.2 1.2L8 17.3"/><path d="M11 6.5h9M11 12.5h9M11 18.5h9"/></svg><span>Einkauf</span></button>
     <button class="nav-btn" data-tab="katalog" onclick="showTab('katalog')"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.2"/></svg><span>Katalog</span></button>
-    <button class="nav-btn" data-tab="kategorien" onclick="showTab('kategorien')"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.6 3H5a2 2 0 0 0-2 2v7.6a2 2 0 0 0 .6 1.4l9.4 9.4a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0-2.8L13.4 3.6a2 2 0 0 0-1.4-.6Z"/><circle cx="8" cy="8" r="1.2"/></svg><span>Kategorien</span></button>
     <button class="nav-btn" data-tab="speisen" onclick="showTab('speisen')"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v18H6.5A2.5 2.5 0 0 1 4 18.5v-13Z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H12v18h5.5a2.5 2.5 0 0 0 2.5-2.5v-13Z"/></svg><span>Speisen</span></button>
   </nav>
 
