@@ -1,5 +1,6 @@
-import { data, CATEGORIES } from './state.js';
+import { data } from './state.js';
 import * as api from './api.js';
+import { loadCategories, populateCategorySelects, renderCategoryManager, startCategoryEdit, cancelCategoryEdit, saveCategoryEdit, removeCategory, submitCategoryForm } from './categories.js';
 import { loadCatalog, renderCatalog, startCatalogEdit, cancelCatalogEdit, saveCatalogEdit, removeCatalogItem, submitCatalogForm } from './catalog.js';
 import { loadActiveListAndItems, renderActiveList, toggleItemChecked, removeListItem, clearCheckedItems, handleQuickAdd, openPicker, closePicker, confirmPicker, completeShopping } from './list.js';
 
@@ -23,13 +24,6 @@ export function showTab(name) {
   document.querySelector('.quick-add-bar').style.display = name === 'einkauf' ? '' : 'none';
 }
 
-function populateCategorySelects() {
-  const optionsHtml = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
-  document.querySelectorAll('.category-select').forEach(sel => {
-    sel.innerHTML = `<option value="">Kategorie</option>${optionsHtml}`;
-  });
-}
-
 export async function init() {
   try {
     const supabase = api.get_supabase();
@@ -43,9 +37,11 @@ export async function init() {
     data.accessToken = session.access_token;
     data.userId = session.user.id;
     hideLogin();
-    populateCategorySelects();
 
+    await loadCategories();
+    populateCategorySelects();
     await Promise.all([loadCatalog(), loadActiveListAndItems()]);
+    renderCategoryManager();
     renderCatalog();
     renderActiveList();
     showTab('einkauf');
@@ -59,6 +55,11 @@ export async function init() {
 window.signInWithGoogle = api.signInWithGoogle;
 window.signOut = api.signOut;
 window.showTab = showTab;
+window.startCategoryEdit = startCategoryEdit;
+window.cancelCategoryEdit = cancelCategoryEdit;
+window.saveCategoryEdit = saveCategoryEdit;
+window.removeCategory = removeCategory;
+window.submitCategoryForm = submitCategoryForm;
 window.startCatalogEdit = startCatalogEdit;
 window.cancelCatalogEdit = cancelCatalogEdit;
 window.saveCatalogEdit = saveCatalogEdit;
@@ -72,5 +73,7 @@ window.openPicker = openPicker;
 window.closePicker = closePicker;
 window.confirmPicker = confirmPicker;
 window.completeShopping = completeShopping;
+window.renderCatalog = renderCatalog;
+window.renderActiveList = renderActiveList;
 
 init();

@@ -1,6 +1,7 @@
-import { data, CATEGORIES } from './state.js';
+import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
 import { renderCatalog } from './catalog.js';
+import { categoryName } from './categories.js';
 
 export async function loadActiveListAndItems() {
   const active = await dbFetch('lists?select=*&is_active=eq.true&limit=1');
@@ -60,7 +61,7 @@ function renderItemRow(item) {
 function groupByCategory(items) {
   const groups = {};
   for (const item of items) {
-    const cat = item.category || 'Sonstiges';
+    const cat = categoryName(item.category_id);
     (groups[cat] = groups[cat] || []).push(item);
   }
   return groups;
@@ -98,11 +99,11 @@ export async function handleQuickAdd(event) {
 
   const name = nameInput.value.trim();
   if (!name) return false;
-  const category = categorySelect.value || 'Sonstiges';
+  const categoryId = categorySelect.value ? Number(categorySelect.value) : null;
 
   let catalogItemId = null;
   if (saveToCatalog.checked) {
-    const catalogRow = await dbInsert('catalog_items', { name, category, created_by: data.userId });
+    const catalogRow = await dbInsert('catalog_items', { name, category_id: categoryId, created_by: data.userId });
     data.catalog.push(catalogRow);
     data.catalog.sort((a, b) => a.name.localeCompare(b.name));
     catalogItemId = catalogRow.id;
@@ -113,7 +114,7 @@ export async function handleQuickAdd(event) {
     list_id: data.activeList.id,
     catalog_item_id: catalogItemId,
     name,
-    category,
+    category_id: categoryId,
     created_by: data.userId
   });
   data.items.push(row);
@@ -168,7 +169,7 @@ export async function confirmPicker() {
       list_id: data.activeList.id,
       catalog_item_id: catalogItem.id,
       name: catalogItem.name,
-      category: catalogItem.category,
+      category_id: catalogItem.category_id,
       quantity: catalogItem.default_quantity,
       created_by: data.userId
     });

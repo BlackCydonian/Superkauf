@@ -1,11 +1,8 @@
-import { data, CATEGORIES } from './state.js';
+import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
+import { categoryName, categorySelectOptionsHtml } from './categories.js';
 
 let editingId = null;
-
-function categoryOptions(selected) {
-  return CATEGORIES.map(c => `<option value="${c}" ${c === selected ? 'selected' : ''}>${c}</option>`).join('');
-}
 
 export async function loadCatalog() {
   data.catalog = await dbFetch('catalog_items?select=*&order=name.asc');
@@ -20,7 +17,7 @@ export function renderCatalog() {
 
   const groups = {};
   for (const item of data.catalog) {
-    const cat = item.category || 'Sonstiges';
+    const cat = categoryName(item.category_id);
     (groups[cat] = groups[cat] || []).push(item);
   }
 
@@ -40,7 +37,7 @@ function renderCatalogRow(item) {
       <li class="item-row item-row--edit">
         <form class="edit-form" onsubmit="return saveCatalogEdit(event, ${item.id})">
           <input type="text" name="name" value="${escapeAttr(item.name)}" required>
-          <select name="category">${categoryOptions(item.category)}</select>
+          <select name="category_id"><option value="">Ohne Kategorie</option>${categorySelectOptionsHtml(item.category_id)}</select>
           <input type="text" name="default_quantity" value="${escapeAttr(item.default_quantity || '')}" placeholder="Menge (optional)">
           <div class="edit-actions">
             <button type="submit" class="btn-primary btn-sm">Speichern</button>
@@ -74,7 +71,7 @@ export async function saveCatalogEdit(event, id) {
   const form = event.target;
   const patch = {
     name: form.name.value.trim(),
-    category: form.category.value,
+    category_id: form.category_id.value ? Number(form.category_id.value) : null,
     default_quantity: form.default_quantity.value.trim() || null
   };
   const updated = await dbUpdate('catalog_items', id, patch);
@@ -99,7 +96,7 @@ export async function submitCatalogForm(event) {
   if (!name) return false;
   const row = await dbInsert('catalog_items', {
     name,
-    category: form.category.value,
+    category_id: form.category_id.value ? Number(form.category_id.value) : null,
     default_quantity: form.default_quantity.value.trim() || null,
     created_by: data.userId
   });
@@ -108,10 +105,6 @@ export async function submitCatalogForm(event) {
   form.reset();
   renderCatalog();
   return false;
-}
-
-export function catalogCategoryOptionsHtml() {
-  return categoryOptions(null);
 }
 
 function escapeHtml(str) {

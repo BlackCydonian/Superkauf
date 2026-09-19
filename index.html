@@ -44,18 +44,26 @@
     <section id="tab-katalog" class="tab">
       <form id="catalog-add-form" class="inline-add-form" onsubmit="return submitCatalogForm(event)">
         <input type="text" name="name" placeholder="Neuer Stammartikel…" autocomplete="off" required>
-        <select name="category" class="category-select"></select>
+        <select name="category_id" class="category-select"></select>
         <input type="text" name="default_quantity" placeholder="Menge (optional)">
         <button type="submit" class="btn-primary">+ Hinzufügen</button>
       </form>
       <div id="catalog-content" class="scroll-content"></div>
     </section>
 
+    <section id="tab-kategorien" class="tab">
+      <form id="category-add-form" class="inline-add-form" onsubmit="return submitCategoryForm(event)">
+        <input type="text" name="name" placeholder="Neue Kategorie…" autocomplete="off" required>
+        <button type="submit" class="btn-primary">+ Hinzufügen</button>
+      </form>
+      <div id="categories-content" class="scroll-content"></div>
+    </section>
+
   </main>
 
   <form id="quick-add-form" class="quick-add-bar" onsubmit="return handleQuickAdd(event)">
     <input id="quick-add-input" type="text" placeholder="Artikel hinzufügen…" autocomplete="off" required>
-    <select id="quick-add-category" class="category-select"></select>
+    <select id="quick-add-category" name="category_id" class="category-select"></select>
     <label class="quick-add-save-catalog">
       <input type="checkbox" id="quick-add-save-catalog" checked>
       in Katalog
@@ -66,6 +74,7 @@
   <nav class="bottom-nav">
     <button class="nav-btn active" data-tab="einkauf" onclick="showTab('einkauf')">🛍️<span>Einkauf</span></button>
     <button class="nav-btn" data-tab="katalog" onclick="showTab('katalog')">📋<span>Katalog</span></button>
+    <button class="nav-btn" data-tab="kategorien" onclick="showTab('kategorien')">🏷️<span>Kategorien</span></button>
   </nav>
 
   <div id="picker-modal" class="modal">
