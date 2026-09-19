@@ -1,0 +1,17 @@
+{
+  "name": "Superkauf",
+  "short_name": "Superkauf",
+  "description": "Einkäufe gemeinsam organisieren",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6f5",
+  "theme_color": "#1b7a4d",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
