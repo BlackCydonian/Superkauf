@@ -1,6 +1,5 @@
 import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
-import { renderCatalog } from './catalog.js';
 import { groupItemsByCategory } from './categories.js';
 import { ICON_TRASH } from './icons.js';
 
@@ -86,30 +85,12 @@ export async function handleQuickAdd(event) {
   event.preventDefault();
   const nameInput = document.getElementById('quick-add-input');
   const categorySelect = document.getElementById('quick-add-category');
-  const saveToCatalog = document.getElementById('quick-add-save-catalog');
 
   const name = nameInput.value.trim();
   if (!name) return false;
   const categoryId = categorySelect.value ? Number(categorySelect.value) : null;
 
-  let catalogItemId = null;
-  if (saveToCatalog.checked) {
-    const catalogRow = await dbInsert('catalog_items', { name, category_id: categoryId, created_by: data.userId });
-    data.catalog.push(catalogRow);
-    data.catalog.sort((a, b) => a.name.localeCompare(b.name));
-    catalogItemId = catalogRow.id;
-    renderCatalog();
-  }
-
-  const row = await dbInsert('list_items', {
-    list_id: data.activeList.id,
-    catalog_item_id: catalogItemId,
-    name,
-    category_id: categoryId,
-    created_by: data.userId
-  });
-  data.items.push(row);
-  renderActiveList();
+  await addItemsToActiveList([{ name, category_id: categoryId }]);
 
   nameInput.value = '';
   categorySelect.value = '';
