@@ -2,6 +2,7 @@ import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
 import { renderCatalog } from './catalog.js';
 import { categoryName } from './categories.js';
+import { ICON_TRASH } from './icons.js';
 
 export async function loadActiveListAndItems() {
   const active = await dbFetch('lists?select=*&is_active=eq.true&limit=1');
@@ -54,7 +55,7 @@ function renderItemRow(item) {
         <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleItemChecked(${item.id})">
         <span class="item-name ${item.checked ? 'item-name--checked' : ''}">${escapeHtml(item.name)}${item.quantity ? ` <span class="item-qty">(${escapeHtml(item.quantity)})</span>` : ''}</span>
       </label>
-      <button class="icon-btn" onclick="removeListItem(${item.id})" aria-label="Entfernen">🗑</button>
+      <button class="icon-btn" onclick="removeListItem(${item.id})" aria-label="Entfernen">${ICON_TRASH}</button>
     </li>`;
 }
 

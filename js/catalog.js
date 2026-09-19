@@ -1,6 +1,7 @@
 import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
 import { categoryName, categorySelectOptionsHtml } from './categories.js';
+import { ICON_PENCIL, ICON_TRASH } from './icons.js';
 
 let editingId = null;
 
@@ -50,8 +51,8 @@ function renderCatalogRow(item) {
     <li class="item-row">
       <span class="item-name">${escapeHtml(item.name)}${item.default_quantity ? ` <span class="item-qty">(${escapeHtml(item.default_quantity)})</span>` : ''}</span>
       <span class="item-row-actions">
-        <button class="icon-btn" onclick="startCatalogEdit(${item.id})" aria-label="Bearbeiten">✎</button>
-        <button class="icon-btn" onclick="removeCatalogItem(${item.id})" aria-label="Löschen">🗑</button>
+        <button class="icon-btn" onclick="startCatalogEdit(${item.id})" aria-label="Bearbeiten">${ICON_PENCIL}</button>
+        <button class="icon-btn" onclick="removeCatalogItem(${item.id})" aria-label="Löschen">${ICON_TRASH}</button>
       </span>
     </li>`;
 }

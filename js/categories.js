@@ -1,5 +1,6 @@
 import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
+import { ICON_PENCIL, ICON_TRASH } from './icons.js';
 
 let editingId = null;
 
@@ -53,8 +54,8 @@ function renderCategoryRow(cat) {
     <li class="item-row">
       <span class="item-name">${escapeHtml(cat.name)}</span>
       <span class="item-row-actions">
-        <button class="icon-btn" onclick="startCategoryEdit(${cat.id})" aria-label="Bearbeiten">✎</button>
-        <button class="icon-btn" onclick="removeCategory(${cat.id})" aria-label="Löschen">🗑</button>
+        <button class="icon-btn" onclick="startCategoryEdit(${cat.id})" aria-label="Bearbeiten">${ICON_PENCIL}</button>
+        <button class="icon-btn" onclick="removeCategory(${cat.id})" aria-label="Löschen">${ICON_TRASH}</button>
       </span>
     </li>`;
 }
