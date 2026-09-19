@@ -1,6 +1,6 @@
 import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
-import { ICON_PENCIL, ICON_TRASH } from './icons.js';
+import { ICON_PENCIL, ICON_TRASH, ICON_ARROW_UP, ICON_ARROW_DOWN } from './icons.js';
 
 let editingId = null;
 
@@ -23,6 +23,30 @@ export function populateCategorySelects() {
   });
 }
 
+// Gruppiert Artikel nach Kategorie und sortiert die Gruppen nach der
+// benutzerdefinierten Kategorie-Reihenfolge (position) statt alphabetisch,
+// damit Katalog und Einkaufsliste dem Rundgang durch den Supermarkt folgen.
+// Artikel ohne Kategorie landen als letzte Gruppe.
+export function groupItemsByCategory(items) {
+  const groups = new Map();
+  for (const item of items) {
+    const key = item.category_id ?? 'none';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(item);
+  }
+  const entries = Array.from(groups.entries()).map(([key, groupItems]) => {
+    const cat = key === 'none' ? null : data.categories.find(c => c.id === key);
+    return {
+      id: key === 'none' ? null : key,
+      name: cat ? cat.name : 'Ohne Kategorie',
+      position: cat ? cat.position : Infinity,
+      items: groupItems
+    };
+  });
+  entries.sort((a, b) => a.position - b.position || a.name.localeCompare(b.name));
+  return entries;
+}
+
 export function renderCategoryManager() {
   const el = document.getElementById('categories-content');
   if (!data.categories.length) {
@@ -32,12 +56,12 @@ export function renderCategoryManager() {
   el.innerHTML = `
     <div class="category-group">
       <ul class="item-list">
-        ${data.categories.map(renderCategoryRow).join('')}
+        ${data.categories.map((cat, i) => renderCategoryRow(cat, i, data.categories.length)).join('')}
       </ul>
     </div>`;
 }
 
-function renderCategoryRow(cat) {
+function renderCategoryRow(cat, index, total) {
   if (editingId === cat.id) {
     return `
       <li class="item-row item-row--edit">
@@ -54,6 +78,8 @@ function renderCategoryRow(cat) {
     <li class="item-row">
       <span class="item-name">${escapeHtml(cat.name)}</span>
       <span class="item-row-actions">
+        <button class="icon-btn icon-btn--sm" onclick="moveCategoryUp(${cat.id})" ${index === 0 ? 'disabled' : ''} aria-label="Nach oben">${ICON_ARROW_UP}</button>
+        <button class="icon-btn icon-btn--sm" onclick="moveCategoryDown(${cat.id})" ${index === total - 1 ? 'disabled' : ''} aria-label="Nach unten">${ICON_ARROW_DOWN}</button>
         <button class="icon-btn" onclick="startCategoryEdit(${cat.id})" aria-label="Bearbeiten">${ICON_PENCIL}</button>
         <button class="icon-btn" onclick="removeCategory(${cat.id})" aria-label="Löschen">${ICON_TRASH}</button>
       </span>
@@ -103,6 +129,33 @@ export async function submitCategoryForm(event) {
   form.reset();
   refreshAfterCategoryChange();
   return false;
+}
+
+async function moveCategory(id, direction) {
+  const idx = data.categories.findIndex(c => c.id === id);
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+  if (idx === -1 || swapIdx < 0 || swapIdx >= data.categories.length) return;
+
+  const a = data.categories[idx];
+  const b = data.categories[swapIdx];
+  const [posA, posB] = [a.position, b.position];
+
+  await Promise.all([
+    dbUpdate('categories', a.id, { position: posB }),
+    dbUpdate('categories', b.id, { position: posA })
+  ]);
+  a.position = posB;
+  b.position = posA;
+  data.categories.sort((x, y) => x.position - y.position || x.name.localeCompare(y.name));
+  refreshAfterCategoryChange();
+}
+
+export function moveCategoryUp(id) {
+  return moveCategory(id, 'up');
+}
+
+export function moveCategoryDown(id) {
+  return moveCategory(id, 'down');
 }
 
 function refreshAfterCategoryChange() {

@@ -1,6 +1,6 @@
 import { data } from './state.js';
 import * as api from './api.js';
-import { loadCategories, populateCategorySelects, renderCategoryManager, startCategoryEdit, cancelCategoryEdit, saveCategoryEdit, removeCategory, submitCategoryForm } from './categories.js';
+import { loadCategories, populateCategorySelects, renderCategoryManager, startCategoryEdit, cancelCategoryEdit, saveCategoryEdit, removeCategory, submitCategoryForm, moveCategoryUp, moveCategoryDown } from './categories.js';
 import { loadCatalog, renderCatalog, startCatalogEdit, cancelCatalogEdit, saveCatalogEdit, removeCatalogItem, submitCatalogForm } from './catalog.js';
 import { loadActiveListAndItems, renderActiveList, toggleItemChecked, removeListItem, clearCheckedItems, handleQuickAdd, openPicker, closePicker, confirmPicker, completeShopping } from './list.js';
 
@@ -60,6 +60,8 @@ window.cancelCategoryEdit = cancelCategoryEdit;
 window.saveCategoryEdit = saveCategoryEdit;
 window.removeCategory = removeCategory;
 window.submitCategoryForm = submitCategoryForm;
+window.moveCategoryUp = moveCategoryUp;
+window.moveCategoryDown = moveCategoryDown;
 window.startCatalogEdit = startCatalogEdit;
 window.cancelCatalogEdit = cancelCatalogEdit;
 window.saveCatalogEdit = saveCatalogEdit;

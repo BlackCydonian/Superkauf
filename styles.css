@@ -105,6 +105,9 @@ button, input, select { font-family: inherit; }
   color: inherit;
 }
 .icon-btn:active { background: rgba(0, 0, 0, .06); }
+.icon-btn:disabled { opacity: .3; }
+.icon-btn:disabled:active { background: transparent; }
+.icon-btn--sm { width: 36px; height: 36px; }
 
 /* ---------- Einkauf tab ---------- */
 
@@ -143,6 +146,7 @@ button, input, select { font-family: inherit; }
 
 .item-check { display: flex; align-items: center; gap: 12px; flex: 1; min-height: 52px; cursor: pointer; }
 .item-check input[type="checkbox"] { width: 24px; height: 24px; flex-shrink: 0; accent-color: #1b7a4d; }
+.item-row > .item-name { flex: 1; min-width: 0; }
 .item-name { font-size: 16px; }
 .item-name--checked { text-decoration: line-through; color: #9aa5a0; }
 .item-qty { color: #7c8a80; font-size: 14px; }

@@ -1,6 +1,6 @@
 import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
-import { categoryName, categorySelectOptionsHtml } from './categories.js';
+import { categorySelectOptionsHtml, groupItemsByCategory } from './categories.js';
 import { ICON_PENCIL, ICON_TRASH } from './icons.js';
 
 let editingId = null;
@@ -16,17 +16,11 @@ export function renderCatalog() {
     return;
   }
 
-  const groups = {};
-  for (const item of data.catalog) {
-    const cat = categoryName(item.category_id);
-    (groups[cat] = groups[cat] || []).push(item);
-  }
-
-  el.innerHTML = Object.keys(groups).sort().map(cat => `
+  el.innerHTML = groupItemsByCategory(data.catalog).map(group => `
     <div class="category-group">
-      <h3 class="category-title">${cat}</h3>
+      <h3 class="category-title">${group.name}</h3>
       <ul class="item-list">
-        ${groups[cat].map(item => renderCatalogRow(item)).join('')}
+        ${group.items.map(item => renderCatalogRow(item)).join('')}
       </ul>
     </div>
   `).join('');

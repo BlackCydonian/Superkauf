@@ -1,7 +1,7 @@
 import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete } from './api.js';
 import { renderCatalog } from './catalog.js';
-import { categoryName } from './categories.js';
+import { groupItemsByCategory } from './categories.js';
 import { ICON_TRASH } from './icons.js';
 
 export async function loadActiveListAndItems() {
@@ -24,12 +24,11 @@ export function renderActiveList() {
     return;
   }
 
-  const openGroups = groupByCategory(open);
-  let html = Object.keys(openGroups).sort().map(cat => `
+  let html = groupItemsByCategory(open).map(group => `
     <details class="category-group" open>
-      <summary class="category-title">${cat} <span class="count">${openGroups[cat].length}</span></summary>
+      <summary class="category-title">${group.name} <span class="count">${group.items.length}</span></summary>
       <ul class="item-list">
-        ${openGroups[cat].map(renderItemRow).join('')}
+        ${group.items.map(renderItemRow).join('')}
       </ul>
     </details>
   `).join('');
@@ -57,15 +56,6 @@ function renderItemRow(item) {
       </label>
       <button class="icon-btn" onclick="removeListItem(${item.id})" aria-label="Entfernen">${ICON_TRASH}</button>
     </li>`;
-}
-
-function groupByCategory(items) {
-  const groups = {};
-  for (const item of items) {
-    const cat = categoryName(item.category_id);
-    (groups[cat] = groups[cat] || []).push(item);
-  }
-  return groups;
 }
 
 export async function toggleItemChecked(id) {
@@ -134,12 +124,11 @@ export function openPicker() {
   if (!data.catalog.length) {
     el.innerHTML = '<p class="empty-hint">Noch keine Stammartikel im Katalog. Leg zuerst welche im Katalog-Tab an.</p>';
   } else {
-    const groups = groupByCategory(data.catalog);
-    el.innerHTML = Object.keys(groups).sort().map(cat => `
+    el.innerHTML = groupItemsByCategory(data.catalog).map(group => `
       <div class="category-group">
-        <h3 class="category-title">${cat}</h3>
+        <h3 class="category-title">${group.name}</h3>
         <ul class="item-list">
-          ${groups[cat].map(item => {
+          ${group.items.map(item => {
             const onList = onListCatalogIds.has(item.id);
             return `
               <li class="item-row">
