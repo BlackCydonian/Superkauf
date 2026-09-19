@@ -4,6 +4,7 @@ export const data = {
   activeList: null,
   categories: [],
   catalog: [],
+  dishes: [],
   items: [],
   activeTab: 'einkauf'
 };

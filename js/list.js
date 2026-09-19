@@ -117,6 +117,14 @@ export async function handleQuickAdd(event) {
   return false;
 }
 
+export async function addItemsToActiveList(items) {
+  for (const payload of items) {
+    const row = await dbInsert('list_items', { list_id: data.activeList.id, created_by: data.userId, ...payload });
+    data.items.push(row);
+  }
+  renderActiveList();
+}
+
 export function openPicker() {
   const el = document.getElementById('picker-content');
   const onListCatalogIds = new Set(data.items.map(i => i.catalog_item_id).filter(Boolean));
@@ -154,19 +162,13 @@ export async function confirmPicker() {
   const checkboxes = document.querySelectorAll('.picker-checkbox:checked:not(:disabled)');
   const chosen = Array.from(checkboxes).map(cb => data.catalog.find(c => c.id === Number(cb.value))).filter(Boolean);
 
-  for (const catalogItem of chosen) {
-    const row = await dbInsert('list_items', {
-      list_id: data.activeList.id,
-      catalog_item_id: catalogItem.id,
-      name: catalogItem.name,
-      category_id: catalogItem.category_id,
-      quantity: catalogItem.default_quantity,
-      created_by: data.userId
-    });
-    data.items.push(row);
-  }
+  await addItemsToActiveList(chosen.map(catalogItem => ({
+    catalog_item_id: catalogItem.id,
+    name: catalogItem.name,
+    category_id: catalogItem.category_id,
+    quantity: catalogItem.default_quantity
+  })));
 
-  renderActiveList();
   closePicker();
 }
 

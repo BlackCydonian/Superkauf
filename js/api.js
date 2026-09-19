@@ -44,6 +44,10 @@ export async function dbDelete(table, id) {
   await dbFetch(`${table}?id=eq.${id}`, { method: 'DELETE', headers: getHeaders({ 'Prefer': 'return=minimal' }) });
 }
 
+export async function dbDeleteMany(table, filterQuery) {
+  await dbFetch(`${table}?${filterQuery}`, { method: 'DELETE', headers: getHeaders({ 'Prefer': 'return=minimal' }) });
+}
+
 export async function signInWithGoogle() {
   const sb = get_supabase();
   await sb.auth.signInWithOAuth({

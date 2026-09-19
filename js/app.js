@@ -3,6 +3,12 @@ import * as api from './api.js';
 import { loadCategories, populateCategorySelects, renderCategoryManager, startCategoryEdit, cancelCategoryEdit, saveCategoryEdit, removeCategory, submitCategoryForm, moveCategoryUp, moveCategoryDown } from './categories.js';
 import { loadCatalog, renderCatalog, startCatalogEdit, cancelCatalogEdit, saveCatalogEdit, removeCatalogItem, submitCatalogForm } from './catalog.js';
 import { loadActiveListAndItems, renderActiveList, toggleItemChecked, removeListItem, clearCheckedItems, handleQuickAdd, openPicker, closePicker, confirmPicker, completeShopping } from './list.js';
+import {
+  loadDishes, renderDishes, newDish, editDish, cancelDishEditor, removeDish, saveDish,
+  updateDraftName, updateDraftIngredient, updateDraftIngredientCategory, updateDraftStep,
+  addDraftIngredient, removeDraftIngredient, addDraftStep, removeDraftStep,
+  openDishPicker, closeDishPicker, confirmDishPicker
+} from './dishes.js';
 
 console.log('✅ app.js loaded successfully');
 
@@ -40,10 +46,11 @@ export async function init() {
 
     await loadCategories();
     populateCategorySelects();
-    await Promise.all([loadCatalog(), loadActiveListAndItems()]);
+    await Promise.all([loadCatalog(), loadActiveListAndItems(), loadDishes()]);
     renderCategoryManager();
     renderCatalog();
     renderActiveList();
+    renderDishes();
     showTab('einkauf');
   } catch (e) {
     console.error('❌ init() error:', e.message, e);
@@ -75,6 +82,22 @@ window.openPicker = openPicker;
 window.closePicker = closePicker;
 window.confirmPicker = confirmPicker;
 window.completeShopping = completeShopping;
+window.newDish = newDish;
+window.editDish = editDish;
+window.cancelDishEditor = cancelDishEditor;
+window.removeDish = removeDish;
+window.saveDish = saveDish;
+window.updateDraftName = updateDraftName;
+window.updateDraftIngredient = updateDraftIngredient;
+window.updateDraftIngredientCategory = updateDraftIngredientCategory;
+window.updateDraftStep = updateDraftStep;
+window.addDraftIngredient = addDraftIngredient;
+window.removeDraftIngredient = removeDraftIngredient;
+window.addDraftStep = addDraftStep;
+window.removeDraftStep = removeDraftStep;
+window.openDishPicker = openDishPicker;
+window.closeDishPicker = closeDishPicker;
+window.confirmDishPicker = confirmDishPicker;
 window.renderCatalog = renderCatalog;
 window.renderActiveList = renderActiveList;
 
