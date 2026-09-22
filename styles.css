@@ -204,9 +204,19 @@ button, input, select { font-family: inherit; }
 .dish-card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .dish-name { font-size: 16px; font-weight: 600; }
 .dish-ingredients-preview { color: #7c8a80; font-size: 14px; margin: 4px 0 10px; }
+.dish-recipe-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #3d7a5c;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+.dish-recipe-link:hover { text-decoration: underline; }
 
 .dish-editor { display: flex; flex-direction: column; gap: 10px; }
-.dish-name-input {
+.dish-name-input, .dish-recipe-url-input {
   min-height: 44px;
   padding: 0 10px;
   border: 1px solid #d7ded9;

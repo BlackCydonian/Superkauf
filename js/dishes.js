@@ -2,9 +2,9 @@ import { data } from './state.js';
 import { dbFetch, dbInsert, dbUpdate, dbDelete, dbDeleteMany } from './api.js';
 import { groupItemsByCategory, categorySelectOptionsHtml } from './categories.js';
 import { addItemsToActiveList } from './list.js';
-import { ICON_PENCIL, ICON_TRASH, ICON_PLUS } from './icons.js';
+import { ICON_PENCIL, ICON_TRASH, ICON_PLUS, ICON_LINK } from './icons.js';
 
-let draft = null; // { id, name, ingredients: [{name, quantity, category_id}], steps: [string] }
+let draft = null; // { id, name, recipeUrl, ingredients: [{name, quantity, category_id}], steps: [string] }
 let pickerDishId = null;
 
 function emptyIngredient() {
@@ -30,6 +30,7 @@ export function renderDishes() {
 
 function renderDishCard(dish) {
   const ingredientNames = dish.dish_ingredients.map(i => i.name).join(', ') || 'Keine Zutaten hinterlegt';
+  const recipeUrl = safeRecipeUrl(dish.recipe_url);
   return `
     <div class="dish-card">
       <div class="dish-card-header">
@@ -40,12 +41,23 @@ function renderDishCard(dish) {
         </span>
       </div>
       <p class="dish-ingredients-preview">${escapeHtml(ingredientNames)}</p>
+      ${recipeUrl ? `<a class="dish-recipe-link" href="${escapeAttr(recipeUrl)}" target="_blank" rel="noopener noreferrer">${ICON_LINK} Rezept öffnen</a>` : ''}
       <button class="btn-secondary btn-icon btn-sm" onclick="openDishPicker(${dish.id})">${ICON_PLUS} Zur Einkaufsliste</button>
     </div>`;
 }
 
+function safeRecipeUrl(url) {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : null;
+  } catch {
+    return null;
+  }
+}
+
 export function newDish() {
-  draft = { id: null, name: '', ingredients: [emptyIngredient()], steps: [''] };
+  draft = { id: null, name: '', recipeUrl: '', ingredients: [emptyIngredient()], steps: [''] };
   renderDishes();
 }
 
@@ -55,6 +67,7 @@ export function editDish(id) {
   draft = {
     id: dish.id,
     name: dish.name,
+    recipeUrl: dish.recipe_url || '',
     ingredients: dish.dish_ingredients.length
       ? dish.dish_ingredients.map(i => ({ name: i.name, quantity: i.quantity || '', category_id: i.category_id }))
       : [emptyIngredient()],
@@ -72,6 +85,7 @@ function renderDishEditor(el) {
   el.innerHTML = `
     <form class="dish-editor" onsubmit="return saveDish(event)">
       <input type="text" class="dish-name-input" value="${escapeAttr(draft.name)}" placeholder="Name der Speise" oninput="updateDraftName(this.value)" required>
+      <input type="url" class="dish-recipe-url-input" value="${escapeAttr(draft.recipeUrl)}" placeholder="Link zum Online-Rezept (optional)" oninput="updateDraftRecipeUrl(this.value)">
 
       <h4 class="editor-subheading">Zutaten</h4>
       <div>
@@ -117,6 +131,10 @@ export function updateDraftName(value) {
   draft.name = value;
 }
 
+export function updateDraftRecipeUrl(value) {
+  draft.recipeUrl = value;
+}
+
 export function updateDraftIngredient(i, field, value) {
   draft.ingredients[i][field] = value;
 }
@@ -155,6 +173,7 @@ export async function saveDish(event) {
   event.preventDefault();
   const name = draft.name.trim();
   if (!name) return false;
+  const recipeUrl = draft.recipeUrl.trim() || null;
 
   const ingredients = draft.ingredients
     .filter(i => i.name.trim())
@@ -163,10 +182,10 @@ export async function saveDish(event) {
 
   let dishId = draft.id;
   if (dishId) {
-    await dbUpdate('dishes', dishId, { name, steps });
+    await dbUpdate('dishes', dishId, { name, steps, recipe_url: recipeUrl });
     await dbDeleteMany('dish_ingredients', `dish_id=eq.${dishId}`);
   } else {
-    const row = await dbInsert('dishes', { name, steps, created_by: data.userId });
+    const row = await dbInsert('dishes', { name, steps, recipe_url: recipeUrl, created_by: data.userId });
     dishId = row.id;
   }
   if (ingredients.length) {

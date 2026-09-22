@@ -5,7 +5,7 @@ import { loadCatalog, renderCatalog, startCatalogEdit, cancelCatalogEdit, saveCa
 import { loadActiveListAndItems, renderActiveList, toggleItemChecked, removeListItem, clearCheckedItems, handleQuickAdd, openPicker, closePicker, confirmPicker, completeShopping } from './list.js';
 import {
   loadDishes, renderDishes, newDish, editDish, cancelDishEditor, removeDish, saveDish,
-  updateDraftName, updateDraftIngredient, updateDraftIngredientCategory, updateDraftStep,
+  updateDraftName, updateDraftRecipeUrl, updateDraftIngredient, updateDraftIngredientCategory, updateDraftStep,
   addDraftIngredient, removeDraftIngredient, addDraftStep, removeDraftStep,
   openDishSelector, openDishPicker, closeDishPicker, confirmDishPicker
 } from './dishes.js';
@@ -88,6 +88,7 @@ window.cancelDishEditor = cancelDishEditor;
 window.removeDish = removeDish;
 window.saveDish = saveDish;
 window.updateDraftName = updateDraftName;
+window.updateDraftRecipeUrl = updateDraftRecipeUrl;
 window.updateDraftIngredient = updateDraftIngredient;
 window.updateDraftIngredientCategory = updateDraftIngredientCategory;
 window.updateDraftStep = updateDraftStep;
