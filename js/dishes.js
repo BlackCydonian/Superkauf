@@ -47,9 +47,11 @@ function renderDishCard(dish) {
 }
 
 function safeRecipeUrl(url) {
-  if (!url) return null;
+  const trimmed = (url || '').trim();
+  if (!trimmed) return null;
+  const withProtocol = /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(trimmed) ? trimmed : `https://${trimmed}`;
   try {
-    const parsed = new URL(url);
+    const parsed = new URL(withProtocol);
     return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : null;
   } catch {
     return null;
@@ -85,7 +87,7 @@ function renderDishEditor(el) {
   el.innerHTML = `
     <form class="dish-editor" onsubmit="return saveDish(event)">
       <input type="text" class="dish-name-input" value="${escapeAttr(draft.name)}" placeholder="Name der Speise" oninput="updateDraftName(this.value)" required>
-      <input type="url" class="dish-recipe-url-input" value="${escapeAttr(draft.recipeUrl)}" placeholder="Link zum Online-Rezept (optional)" oninput="updateDraftRecipeUrl(this.value)">
+      <input type="text" class="dish-recipe-url-input" value="${escapeAttr(draft.recipeUrl)}" placeholder="Link zum Online-Rezept (optional)" oninput="updateDraftRecipeUrl(this.value)">
 
       <h4 class="editor-subheading">Zutaten</h4>
       <div>
@@ -173,7 +175,7 @@ export async function saveDish(event) {
   event.preventDefault();
   const name = draft.name.trim();
   if (!name) return false;
-  const recipeUrl = draft.recipeUrl.trim() || null;
+  const recipeUrl = safeRecipeUrl(draft.recipeUrl);
 
   const ingredients = draft.ingredients
     .filter(i => i.name.trim())
